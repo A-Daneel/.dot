@@ -1,0 +1,26 @@
+#/usr/bin/env bash
+
+kiwi_commands() {
+    branch_name=$(basename $1)
+    kiwi="$HOME/$branch_name"
+
+    yarn install
+}
+
+case "$1" in
+    "tmux")
+        session_name=$(tmux display-message -p '#S');
+        clean_arg=$(basename $2 | tr '/.' '__')
+        yarn_target="$session_name:yarn"
+
+        cat $HOME/personal/helpless-kiwi.git/.env.local
+        if ! tmux has-session -t $yarn_target; then
+            tmux neww -dn "yarn"
+        fi
+        tmux send-keys -t $yarn_target "~/.local/bin/tmux-kiwi $2" ENTER
+        ;;
+        
+     *)
+        kiwi_commands $1 $2
+        ;;
+esac
