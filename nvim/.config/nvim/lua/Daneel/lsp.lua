@@ -1,23 +1,27 @@
 local cmp = require'cmp'
 
 cmp.setup({
-    snippet = {
-        expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
-        end,
-    },
     mapping = {
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.close(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<C-y>'] = cmp.mapping.confirm{ 
+            select = true,
+        },
+
+        ['<C-Space>'] = cmp.mapping.complete(),
     },
     sources = {
-        { name = 'nvim_lsp' },
-        { name = 'vsnip' },
-        { name = 'buffer' },
-    }
+        { name = "nvim_lsp" },
+        { name = "path" },
+        { name = "luasnip" },
+        { name = "buffer", keyword_length = 5 },
+    },
+    snippet = {
+        expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+        end,
+    },
 })
 
 -- stole this from Prime, looks nice
@@ -38,8 +42,22 @@ require'lspconfig'.jdtls.setup(config({
     end
 }))
 
+require("lspconfig").gopls.setup(config({
+    cmd = { "gopls", "serve" },
+    settings = {
+        gopls = {
+            analyses = {
+                unusedparams = true,
+            },
+            staticcheck = true,
+        },
+    },
+}))
+
 require'lspconfig'.tsserver.setup(config())
 
 require'lspconfig'.tailwindcss.setup(config())
 
 require'lspconfig'.bashls.setup(config())
+
+require'lspconfig'.dockerls.setup(config())

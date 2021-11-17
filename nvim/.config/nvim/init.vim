@@ -1,21 +1,21 @@
 call plug#begin('~/.vim/plugged')
 
 Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
-"Plug 'hrsh7th/nvim-compe'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-nvim-lsp'
+
+Plug 'saadparwaiz1/cmp_luasnip'
 
 " java.....
 Plug 'mfussenegger/nvim-jdtls'
-Plug 'vim-test/vim-test'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 
 Plug 'tpope/vim-fugitive'
 Plug 'mbbill/undotree'
-
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -23,6 +23,7 @@ Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'ThePrimeagen/harpoon'
 Plug 'ThePrimeagen/git-worktree.nvim'
 Plug 'gruvbox-community/gruvbox'
+Plug 'vim-test/vim-test'
 
 call plug#end()
 
