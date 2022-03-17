@@ -30,6 +30,7 @@ Plug 'sbdchd/neoformat'
 
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
+Plug 'theHamsta/nvim-dap-virtual-text'
 Plug 'Pocco81/DAPInstall.nvim'
 
 call plug#end()
