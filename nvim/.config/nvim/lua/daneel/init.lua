@@ -1,6 +1,7 @@
 require("daneel.telescope")
 require("daneel.lsp")
 require("daneel.git-worktree")
+require("daneel.dap-conf")
 
 if pcall(require, "plenary") then
 	RELOAD = require("plenary.reload").reload_module
