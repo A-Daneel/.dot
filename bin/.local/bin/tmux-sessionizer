@@ -1,17 +1,9 @@
 #!/usr/bin/env bash
 
-algo=(/home/daneel/study/algo_and_data_struct/team04)
-webf=(/home/daneel/study/WEBFramework/team01)
-study=($algo $webf)
-
-dotF=(/home/daneel/.config/nvim)
-kiwi=(/home/daneel/personal)
-private=($dotF $kiwi)
-
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ${study[@]} ${private[@]} -maxdepth 1 -mindepth 1 -type d | fzf)
+    selected=$(find ~/personal ~/.dotfiles -maxdepth 1 -mindepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then

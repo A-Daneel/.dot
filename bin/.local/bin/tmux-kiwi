@@ -4,7 +4,6 @@ tmux-windowizer yarn
 tmux-windowizer server
 
 tmux kill-window -t yarn
-tmux-windowizer yarn "yarn install --silent && yarn watch"
+tmux-windowizer yarn "yarn install && yarn watch"
 tmux kill-window -t server
-tmux-windowizer server "php bin/console server:stop"
-tmux-windowizer server "composer install && php bin/console server:start"
+tmux-windowizer server "composer install && symfony server:start --no-tls"

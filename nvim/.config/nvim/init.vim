@@ -1,11 +1,10 @@
 call plug#begin('~/.vim/plugged')
 
 Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-nvim-lsp'
-
+Plug 'hrsh7th/nvim-cmp'
 Plug 'saadparwaiz1/cmp_luasnip'
 
 " java.....
@@ -15,6 +14,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 Plug 'mbbill/undotree'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -22,12 +22,19 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'ThePrimeagen/harpoon'
 Plug 'ThePrimeagen/git-worktree.nvim'
+"Plug 'ThePrimeagen/refactoring.nvim'
+Plug '/home/daneel/personal/refactoring.nvim.git/php'
 Plug 'gruvbox-community/gruvbox'
 Plug 'vim-test/vim-test'
+Plug 'sbdchd/neoformat'
+
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'Pocco81/DAPInstall.nvim'
 
 call plug#end()
 
-lua require("Daneel")
+lua require("daneel")
 lua require'nvim-treesitter.configs'.setup {highlight = { enable = true } }
  
 " make ripgrep use current workdir for searching
