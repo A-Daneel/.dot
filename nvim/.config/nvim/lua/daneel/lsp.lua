@@ -36,13 +36,16 @@ local function config(_config)
     }, _config or {})
 end
 
---require'lspconfig'.phpactor.setup(config())
-require'lspconfig'.intelephense.setup(config())
---require'lspconfig'.intelephense.setup(config({
---    cmd = { "intelephense", "--stdio" }
---    filetypes = { "php" }
---    root_dir = root_pattern("composer.json", ".git")
---}))
+require'lspconfig'.intelephense.setup(config({
+    on_attach = function(client)
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+    end,
+    --    cmd = { "intelephense", "--stdio" }
+    --    filetypes = { "php" }
+    --    root_dir = root_pattern("composer.json", ".git")
+    --
+}))
 
 require'lspconfig'.jdtls.setup(config({
     cmd = { 'jdtls' },

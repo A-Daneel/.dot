@@ -1,5 +1,6 @@
 call plug#begin('~/.vim/plugged')
 
+Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -7,23 +8,21 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'saadparwaiz1/cmp_luasnip'
 
-" java.....
-Plug 'mfussenegger/nvim-jdtls'
-
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
 Plug 'mbbill/undotree'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
+
 Plug 'ThePrimeagen/harpoon'
 Plug 'ThePrimeagen/git-worktree.nvim'
-"Plug 'ThePrimeagen/refactoring.nvim'
-Plug '/home/daneel/personal/refactoring.nvim.git/php'
+Plug 'ThePrimeagen/refactoring.nvim'
+"Plug '/home/daneel/personal/refactoring.nvim.git/php'
+"
 Plug 'gruvbox-community/gruvbox'
 Plug 'vim-test/vim-test'
 Plug 'sbdchd/neoformat'
@@ -31,7 +30,6 @@ Plug 'sbdchd/neoformat'
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'theHamsta/nvim-dap-virtual-text'
-Plug 'Pocco81/DAPInstall.nvim'
 
 call plug#end()
 
