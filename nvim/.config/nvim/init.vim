@@ -7,6 +7,7 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'L3MON4D3/LuaSnip'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
@@ -51,6 +52,9 @@ nnoremap <Leader><CR> :so ~/.config/nvim/init.vim<CR>
 
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+nnoremap <leader>k :cnext<CR>zz
+nnoremap <leader>j :cprev<CR>zz
 
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
