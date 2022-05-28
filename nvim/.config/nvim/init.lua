@@ -1,0 +1,11 @@
+require("plugins")
+require("options")
+require("lsp")
+require("theme")
+require("keymaps")
+
+require("setup.harpoon")
+require("setup.null")
+require("setup.telescope")
+require("setup.treesitter")
+require("setup.worktree")
