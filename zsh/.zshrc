@@ -9,7 +9,7 @@ HIST_STAMPS="yyyy/mm/dd"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
-export EDITOR='nvim'
+export EDITOR=nvim
 
 source $HOME/.zsh_profile
 export PATH=$PATH:$HOME/.local/bin

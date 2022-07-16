@@ -6,18 +6,18 @@ capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
 -- behind the scenes magic for format on safe
 -- and using null-ls phpstan over lsp intlephense
-local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 local lsp_formatting = function(bufnr)
-	vim.lsp.buf.format({
-		filter = function(clients)
-			-- filter out clients that you don't want to use
-			return vim.tbl_filter(function(client)
-				return client.name ~= "intelephense"
-			end, clients)
-		end,
-		bufnr = bufnr,
-	})
+    vim.lsp.buf.format({
+        filter = function(client)
+            -- apply whatever logic you want (in this example, we'll only use null-ls)
+            return client.name ~= "intelephense"
+        end,
+        bufnr = bufnr,
+    })
 end
+
+-- if you want to set up formatting on save, you can use this as a callback
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 local on_attach = function(client, bufnr)
 	local function buf_set_keymap(...)
@@ -54,19 +54,20 @@ local on_attach = function(client, bufnr)
 	end
 end
 
+local servers = { 'gopls', 'bashls', 'yamlls' }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+  }
+end
+
 nvim_lsp.intelephense.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
-})
-
-nvim_lsp.gopls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-})
-
-nvim_lsp.bashls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
+    init_options =  {
+        licenceKey = ""
+    },
 })
 
 nvim_lsp.sumneko_lua.setup({

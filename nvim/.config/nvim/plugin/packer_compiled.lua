@@ -104,6 +104,11 @@ _G.packer_plugins = {
     path = "/home/daneel/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
+  ["express_line.nvim"] = {
+    loaded = true,
+    path = "/home/daneel/.local/share/nvim/site/pack/packer/start/express_line.nvim",
+    url = "https://github.com/tjdevries/express_line.nvim"
+  },
   ["friendly-snippets"] = {
     loaded = true,
     path = "/home/daneel/.local/share/nvim/site/pack/packer/start/friendly-snippets",
@@ -143,11 +148,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/daneel/.local/share/nvim/site/pack/packer/start/lspkind-nvim",
     url = "https://github.com/onsails/lspkind-nvim"
-  },
-  ["lualine.nvim"] = {
-    loaded = true,
-    path = "/home/daneel/.local/share/nvim/site/pack/packer/start/lualine.nvim",
-    url = "https://github.com/hoob3rt/lualine.nvim"
   },
   neoformat = {
     loaded = true,
@@ -237,6 +237,11 @@ _G.packer_plugins = {
     path = "/home/daneel/.local/share/nvim/site/pack/packer/start/telescope-fzy-native.nvim",
     url = "https://github.com/nvim-telescope/telescope-fzy-native.nvim"
   },
+  ["telescope-send-to-harpoon.nvim"] = {
+    loaded = true,
+    path = "/home/daneel/.local/share/nvim/site/pack/packer/start/telescope-send-to-harpoon.nvim",
+    url = "https://github.com/asbjornhaland/telescope-send-to-harpoon.nvim"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/daneel/.local/share/nvim/site/pack/packer/start/telescope.nvim",
@@ -251,6 +256,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/daneel/.local/share/nvim/site/pack/packer/start/vim-devicons",
     url = "https://github.com/ryanoasis/vim-devicons"
+  },
+  ["vim-dispatch"] = {
+    loaded = true,
+    path = "/home/daneel/.local/share/nvim/site/pack/packer/start/vim-dispatch",
+    url = "https://github.com/tpope/vim-dispatch"
   },
   ["vim-fugitive"] = {
     loaded = true,

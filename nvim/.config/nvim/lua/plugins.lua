@@ -24,15 +24,16 @@ require('packer').startup(function(use)
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-nvim-lua" },
 			{ "onsails/lspkind-nvim" },
-			{ "L3MON4D3/LuaSnip" },
+            { "L3MON4D3/LuaSnip" },
 			{ "saadparwaiz1/cmp_luasnip" },
 			{ "rafamadriz/friendly-snippets" },
 		},
 	})
-	use({ "hoob3rt/lualine.nvim",
+	use({ "tjdevries/express_line.nvim",
 		requires = {
 			{ "kyazdani42/nvim-web-devicons" },
 			{ "ryanoasis/vim-devicons" },
+			{ "nvim-lua/plenary.nvim" },
 		},
 	})
 	use({ "nvim-telescope/telescope.nvim",
@@ -42,6 +43,7 @@ require('packer').startup(function(use)
 			{ "nvim-lua/popup.nvim" },
 			{ "nvim-lua/plenary.nvim" },
 			{ "nvim-telescope/telescope-fzy-native.nvim" },
+            { "asbjornhaland/telescope-send-to-harpoon.nvim" },
 		},
 	})
 	use({ "tpope/vim-fugitive" })
@@ -61,7 +63,11 @@ require('packer').startup(function(use)
 	})
 	use({ "mbbill/undotree" })
 	use({ "sbdchd/neoformat" })
-	use({ "vim-test/vim-test" })
+	use({ "vim-test/vim-test",
+        requires = {
+            { "tpope/vim-dispatch" }
+        },
+    })
 	use({ "danymat/neogen",
 		requires = "nvim-treesitter/nvim-treesitter",
 	})

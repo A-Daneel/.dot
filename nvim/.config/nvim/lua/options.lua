@@ -32,3 +32,7 @@ vim.opt.showmode = false
 vim.opt.background = "dark"
 vim.opt.guicursor = ""
 vim.opt.pumblend = 15
+
+vim.g["test#strategy"] = "neovim"
+vim.g["test#neovim#start_normal"] = 1
+vim.g["test#neovim#term_position"] = "below 15"
