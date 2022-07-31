@@ -62,6 +62,12 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+nvim_lsp.rust_analyzer.setup({
+    cmd = {"rustup", "run", "nightly", "rust-analyzer" },
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
+
 nvim_lsp.intelephense.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
