@@ -1,7 +1,15 @@
+addToPathFront() {
+    if [[ "$PATH" != *"$1"* ]]; then
+        export PATH=$1:$PATH
+    fi
+}
+
 export ZSH=$HOME/.oh-my-zsh
-export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH
+export SONAR_JAVA_PATH=/usr/lib/jvm/java-11-openjdk-amd64/bin/java
+
+addToPathFront $HOME/go/bin
+addToPathFront /usr/local/go/bin
 
 ZSH_THEME="robbyrussell"
 HIST_STAMPS="yyyy/mm/dd"
@@ -12,7 +20,5 @@ source $ZSH/oh-my-zsh.sh
 export EDITOR=nvim
 
 source $HOME/.zsh_profile
-export PATH=$PATH:$HOME/.local/bin
-export PATH=$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH
-export PATH=$PATH:/usr/local/go/bin
 alias luamake=/home/daneel/lua-language-server/3rd/luamake/luamake
+

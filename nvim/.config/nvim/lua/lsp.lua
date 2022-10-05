@@ -1,5 +1,4 @@
 local nvim_lsp = require("lspconfig")
-local lsp_signature = require("lsp_signature")
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
@@ -23,9 +22,6 @@ local on_attach = function(client, bufnr)
 	local function buf_set_keymap(...)
 		vim.api.nvim_buf_set_keymap(bufnr, ...)
 	end
-
-	-- Set up LSP signature
-	lsp_signature.on_attach()
 
 	-- Mappings.
 	local opts = { noremap = true, silent = true }
@@ -71,10 +67,22 @@ nvim_lsp.rust_analyzer.setup({
 nvim_lsp.intelephense.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
-    init_options =  {
-        licenceKey = ""
-    },
 })
+
+require'lspconfig'.texlab.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        texlab = {
+            build = {
+                args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+                executable = "xelatex",
+                forwardSearchAfter = false,
+                onSave = false
+            },
+        },
+    },
+}
 
 nvim_lsp.sumneko_lua.setup({
 	cmd = { "/home/daneel/lua-language-server/bin/lua-language-server" },

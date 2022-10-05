@@ -1,2 +1,2 @@
 alias vim="nvim"
-
+alias idea="$HOME/Downloads/idea-IC-222.3739.54/bin/idea.sh &; disown"

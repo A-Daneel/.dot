@@ -1,7 +1,6 @@
 -- how to do this in lua, mebby with colorbuddy?
-vim.cmd("colorscheme gruvbox")
-
 vim.cmd([[
+    colorscheme tokyonight
 	highlight ColorColumn ctermbg=0 guibg=grey
 	hi SignColumn guibg=none
 	hi CursorLineNR guibg=None

@@ -10,12 +10,7 @@ require('packer').startup(function(use)
 	-- appearently packer can pack itself
 	use({ "wbthomason/packer.nvim" })
 	use({ "jose-elias-alvarez/null-ls.nvim" })
-	use({ "neovim/nvim-lspconfig",
-		requires = {
-			{ "ray-x/lsp_signature.nvim" },
-			{ "mfussenegger/nvim-jdtls" },
-		},
-	})
+	use({ "neovim/nvim-lspconfig" })
 	use({ "hrsh7th/nvim-cmp",
 		requires = {
 			{ "hrsh7th/cmp-buffer" },
@@ -68,6 +63,7 @@ require('packer').startup(function(use)
             { "tpope/vim-dispatch" }
         },
     })
+    use { 'dccsillag/magma-nvim', run = ':UpdateRemotePlugins' }
 	use({ "danymat/neogen",
 		requires = "nvim-treesitter/nvim-treesitter",
 	})
@@ -75,6 +71,12 @@ require('packer').startup(function(use)
 	use({ "dstein64/vim-startuptime", cmd = { "StartupTime" } })
 	use({ "tjdevries/gruvbuddy.nvim" })
 	use({ "ellisonleao/gruvbox.nvim" })
+    use({ "folke/tokyonight.nvim" })
+    use({ "phaazon/mind.nvim",
+        config = function ()
+            require'mind'.setup()
+        end
+    })
 
 	-- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
 	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable "make" == 1 }
