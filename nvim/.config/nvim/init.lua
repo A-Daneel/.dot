@@ -1,0 +1,1 @@
+require("daneel.config.lazy")
