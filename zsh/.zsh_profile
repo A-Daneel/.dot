@@ -1,2 +1,5 @@
-alias vim="nvim"
+VIM="nvim"
 alias idea="$HOME/Downloads/idea-IC-222.3739.54/bin/idea.sh &; disown"
+
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
