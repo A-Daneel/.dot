@@ -8,6 +8,10 @@ return {
       tokyonight.setup({
         style = "night",
         transparent = true,
+        styles = {
+          sidebars = "transparent",
+          floats = "transparent",
+        },
       })
       tokyonight.load()
     end,

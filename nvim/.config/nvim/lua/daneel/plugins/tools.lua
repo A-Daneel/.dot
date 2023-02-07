@@ -1,5 +1,19 @@
 return {
   {
+    "vim-test/vim-test",
+    keys = {
+      { "<leader>ts", "<cmd>TestSuite<CR>", desc = "Test Suite" },
+      { "<leader>tn", "<cmd>TestNearest<cr>", desc = "Test Nearest" },
+      { "<leader>tf", "<cmd>TestFile<CR>", desc = "Test File" },
+      { "<leader>tl", "<cmd>TestLast<CR>", desc = "Test Last" },
+    },
+    config = function()
+      vim.g["test#strategy"] = "neovim"
+      vim.g["test#neovim#start_normal"] = "1"
+      vim.g["test#neovim#term_position"] = "below 15"
+    end,
+  },
+  {
     "ThePrimeagen/git-worktree.nvim",
     keys = {
       {
