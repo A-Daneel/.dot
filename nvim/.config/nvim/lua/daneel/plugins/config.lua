@@ -7,7 +7,7 @@ local function load(name)
     end, {
       msg = "Failed loading " .. mod,
       on_error = function(msg)
-        local modpath = require("lazy.core.cache").find(mod)
+        local modpath = require("lazy.core.loader").find(mod)
         if modpath then
           Util.error(msg)
         end

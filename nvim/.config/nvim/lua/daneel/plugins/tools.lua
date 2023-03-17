@@ -1,9 +1,19 @@
 return {
   {
+    "mbbill/undotree",
+    keys = {
+      {
+        "<leader>u",
+        "<cmd>UndotreeToggle<CR>",
+        desc = "Toggle undotree",
+      },
+    },
+  },
+  {
     "vim-test/vim-test",
     keys = {
       { "<leader>ts", "<cmd>TestSuite<CR>", desc = "Test Suite" },
-      { "<leader>tn", "<cmd>TestNearest<cr>", desc = "Test Nearest" },
+      { "<leader>tn", "<cmd>TestNearest<CR>", desc = "Test Nearest" },
       { "<leader>tf", "<cmd>TestFile<CR>", desc = "Test File" },
       { "<leader>tl", "<cmd>TestLast<CR>", desc = "Test Last" },
     },

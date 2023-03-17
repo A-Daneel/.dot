@@ -5,7 +5,7 @@ return {
     build = "deno task --quiet build:fast",
     keys = {
       {
-        "<leader>om",
+        "<leader>sm",
         function()
           local peek = require("peek")
           if peek.is_open() then
@@ -19,9 +19,21 @@ return {
     },
     opts = { theme = "light" },
   },
+  -- jypyter
+  {
+    "dccsillag/magma-nvim",
+    build = "UpdateRemotePlugins",
+  },
   -- latex preview
   {
     "lervag/vimtex",
-    lazy = false, --plugin say's this is needed. I dislike it
+    ft = "tex",
+    keys = {
+      {
+        "<leader>st",
+        "<cmd>VimtexCompile<cr>",
+        desc = "Vimtex (latex preview)",
+      },
+    },
   },
 }

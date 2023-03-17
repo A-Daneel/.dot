@@ -29,7 +29,6 @@ return {
       local lsp = require("lsp-zero")
       lsp.preset("recommended")
       lsp.ensure_installed({
-        "sumneko_lua",
         "intelephense",
       })
       lsp.nvim_workspace()
@@ -46,11 +45,12 @@ return {
           select = true,
         }),
         ["<C-Space>"] = cmp.mapping.complete(),
-        ["<tab>"] = vim.NILd,
+        ["<tab>"] = vim.NIL,
         ["<S-tab>"] = vim.NIL,
       })
 
       lsp.set_preferences({
+        suggest_lsp_servers = false,
         sign_icons = {
           error = "E",
           warn = "W",
@@ -59,7 +59,7 @@ return {
         },
       })
 
-      lsp.on_attach(function(client, bufnr)
+      lsp.on_attach(function(_, bufnr)
         local opts = { buffer = bufnr, remap = false }
 
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
@@ -79,7 +79,6 @@ return {
       local nls = require("null-ls")
       nls.setup({
         save_after_format = false,
-
         sources = {
           nls.builtins.formatting.stylua,
           nls.builtins.formatting.prettier.with({

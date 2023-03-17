@@ -10,7 +10,7 @@ return {
         transparent = true,
         styles = {
           sidebars = "transparent",
-          floats = "transparent",
+          floats = "dark",
         },
       })
       tokyonight.load()
