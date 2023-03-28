@@ -1,14 +1,20 @@
 return {
   {
     "nvim-telescope/telescope.nvim",
+    cmd = "Telescope",
     dependencies = {
       "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-      config = function()
-        require("telescope").load_extension("fzf")
-      end,
+      "nvim-telescope/telescope-bibtex.nvim",
     },
-    cmd = "Telescope",
+    config = function(_, opts)
+      local telescope = require("telescope")
+      telescope.setup(opts)
+
+      local extensions = { "fzf", "bibtex" }
+      for _, extension in ipairs(extensions) do
+        telescope.load_extension(extension)
+      end
+    end,
     keys = {
       {
         "<leader>pf",
@@ -29,5 +35,16 @@ return {
         end,
       },
     },
+    opts = function()
+      local home = vim.fn.expand("~")
+      return {
+        extensions = {
+          bibtex = {
+            format = "plain",
+            global_files = { home .. "/biblio.bib" },
+          },
+        },
+      }
+    end,
   },
 }
