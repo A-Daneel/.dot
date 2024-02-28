@@ -3,6 +3,7 @@ return {
   {
     "toppair/peek.nvim",
     build = "deno task --quiet build:fast",
+    opts = { theme = "light" },
     keys = {
       {
         "<leader>sm",
@@ -17,23 +18,10 @@ return {
         desc = "Peek (Markdown Preview)",
       },
     },
-    opts = { theme = "light" },
-  },
-  -- jypyter
-  {
-    "dccsillag/magma-nvim",
-    build = "UpdateRemotePlugins",
   },
   -- latex preview
   {
     "lervag/vimtex",
     ft = "tex",
-    keys = {
-      {
-        "<leader>st",
-        "<cmd>VimtexCompile<cr>",
-        desc = "Vimtex (latex preview)",
-      },
-    },
   },
 }

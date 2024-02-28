@@ -6,6 +6,17 @@ return {
       "nvim-telescope/telescope-fzf-native.nvim",
       "nvim-telescope/telescope-bibtex.nvim",
     },
+    opts = function()
+      local home = vim.fn.expand("~")
+      return {
+        extensions = {
+          bibtex = {
+            format = "plain",
+            global_files = { home .. "/biblio.bib" },
+          },
+        },
+      }
+    end,
     config = function(_, opts)
       local telescope = require("telescope")
       telescope.setup(opts)
@@ -15,34 +26,26 @@ return {
         telescope.load_extension(extension)
       end
     end,
-    keys = {
-      {
-        "<leader>pf",
-        function()
-          require("telescope.builtin").find_files()
-        end,
-      },
-      {
-        "<C-p>",
-        function()
-          require("telescope.builtin").git_files()
-        end,
-      },
-      {
-        "<leader>ps",
-        function()
-          require("telescope.builtin").live_grep()
-        end,
-      },
-    },
-    opts = function()
-      local home = vim.fn.expand("~")
+    keys = function()
+      local builtin = require("telescope.builtin")
       return {
-        extensions = {
-          bibtex = {
-            format = "plain",
-            global_files = { home .. "/biblio.bib" },
-          },
+        {
+          "<leader>pf",
+          function()
+            builtin.find_files()
+          end,
+        },
+        {
+          "<C-p>",
+          function()
+            builtin.git_files()
+          end,
+        },
+        {
+          "<leader>ps",
+          function()
+            builtin.live_grep()
+          end,
         },
       }
     end,

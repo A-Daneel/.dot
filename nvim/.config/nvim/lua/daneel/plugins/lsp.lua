@@ -1,14 +1,76 @@
 return {
   {
+    -- special ltex shizzle
+    { "barreiroleo/ltex_extra.nvim", ft = "tex" }, -- why does this not work?
+    -- LSP
     {
-      "VonHeikemen/lsp-zero.nvim",
-      branch = "v2.x",
-      lazy = true,
+      "neovim/nvim-lspconfig",
+      cmd = "LspInfo",
+      event = { "BufReadPre", "BufNewFile" },
+      dependencies = {
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
+        "hrsh7th/cmp-nvim-lsp",
+        -- special nvim lsp from folke
+        { "folke/neodev.nvim", opts = {} },
+      },
       config = function()
-        -- This is where you modify the settings for lsp-zero
-        -- Note: autocompletion settings will not take effect
+        -- This is where all the LSP shenanigans will live
+        local lspconfig = require("lspconfig")
+        local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+        require("mason").setup()
+        require("mason-lspconfig").setup({
+          ensure_installed = {
+            "gopls",
+            "intelephense",
+            "ltex",
+            "pyright",
+            "rust_analyzer",
+          },
+        })
+        require("mason-lspconfig").setup_handlers({
+          function(server_name)
+            lspconfig[server_name].setup({
+              capabilities = lsp_capabilities,
+            })
+          end,
+        })
+        lspconfig.ltex.setup({
+          capabilities = lsp_capabilities,
+          on_attach = function()
+            require("ltex_extra").setup({
+              load_langs = { "nl", "en-US" },
+              init_check = true,
+              path = vim.fn.expand("~") .. "/.dotfiles/nvim/spell",
+            })
+          end,
+          settings = {
+            ltex = {
+              checkFrequency = "save",
+            },
+          },
+        })
 
-        require("lsp-zero.settings").preset({})
+        vim.diagnostic.config({
+          float = {
+            source = "always",
+          },
+        })
+        vim.api.nvim_create_autocmd("LspAttach", {
+          group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+          callback = function(ev)
+            local opts = { buffer = ev.bufnr, remap = false }
+
+            vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+            vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
+            vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
+            vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
+            vim.keymap.set("n", "<leader>vri", vim.lsp.buf.implementation, opts)
+            vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
+            vim.keymap.set("n", "<leader>vh", vim.lsp.buf.signature_help, opts)
+          end,
+        })
       end,
     },
 
@@ -17,223 +79,97 @@ return {
       "hrsh7th/nvim-cmp",
       event = "InsertEnter",
       dependencies = {
-        { "L3MON4D3/LuaSnip" },
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+        "micangl/cmp-vimtex",
+        "L3MON4D3/LuaSnip",
       },
-      config = function()
-        -- Here is where you configure the autocompletion settings.
-        -- The arguments for .extend() have the same shape as `manage_nvim_cmp`:
-        -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#manage_nvim_cmp
-
-        require("lsp-zero.cmp").extend()
-
-        -- And you can configure cmp even more, if you want to.
+      opts = function()
         local cmp = require("cmp")
-
-        cmp.setup({
+        local cmp_select = { behavior = cmp.SelectBehavior.Select }
+        return {
+          snippet = {
+            expand = function(args)
+              require("luasnip").lsp_expand(args.body)
+            end,
+          },
           mapping = {
-            ["<C-p>"] = cmp.mapping.select_prev_item({
-              behavior = cmp.SelectBehavior.Select,
-            }),
-            ["<C-n>"] = cmp.mapping.select_next_item({
-              behavior = cmp.SelectBehavior.Select,
-            }),
-            ["<C-y>"] = cmp.mapping.confirm({
-              select = true,
-            }),
+            ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+            ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+            ["<C-y>"] = cmp.mapping.confirm({ select = true }),
             ["<C-Space>"] = cmp.mapping.complete(),
-            ["<tab>"] = vim.NIL,
-            ["<S-tab>"] = vim.NIL,
+            ["<tab>"] = nil,
+            ["<S-tab>"] = nil,
           },
-        })
-      end,
-    },
-
-    -- LSP
-    {
-      "neovim/nvim-lspconfig",
-      cmd = "LspInfo",
-      event = { "BufReadPre", "BufNewFile" },
-      dependencies = {
-        { "hrsh7th/cmp-nvim-lsp" },
-        { "williamboman/mason-lspconfig.nvim" },
-        {
-          "williamboman/mason.nvim",
-          build = function()
-            pcall(vim.cmd, "MasonUpdate")
-          end,
-        },
-        { "jose-elias-alvarez/null-ls.nvim" },
-      },
-      config = function()
-        -- This is where all the LSP shenanigans will live
-        local lsp = require("lsp-zero")
-        lsp.set_sign_icons = {
-          error = "E",
-          warn = "W",
-          hint = "H",
-          info = "I",
+          sources = cmp.config.sources({
+            { name = "vim-dadbod-completion" },
+            { name = "nvim_lsp" },
+            { name = "vimtex" },
+            { name = "luasnip" },
+            { name = "buffer" },
+            { name = "path" },
+          }),
         }
-
-        lsp.on_attach(function(_, bufnr)
-          local opts = { buffer = bufnr, remap = false }
-
-          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-          vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
-          vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
-          vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
-          vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
-          vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
-          vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
-          vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
-          vim.keymap.set("n", "<leader>vh", vim.lsp.buf.signature_help, opts)
-        end)
-
-        -- (Optional) Configure lua language server for neovim
-        require("lspconfig").lua_ls.setup(lsp.nvim_lua_ls())
-
-        lsp.setup()
-
-        local nls = require("null-ls")
-        nls.setup({
-          save_after_format = false,
-          sources = {
-            nls.builtins.formatting.stylua,
-            nls.builtins.formatting.prettier.with({
-              only_local = ".prettierrc.json",
-            }),
-            nls.builtins.formatting.phpcsfixer.with({
-              only_local = "vendor/bin",
-            }),
-            nls.builtins.diagnostics.ansiblelint.with({
-              only_local = ".ansible-lint",
-            }),
-            nls.builtins.diagnostics.phpstan.with({
-              only_local = "vendor/bin",
-            }),
-          },
-        })
-
-        vim.diagnostic.config({
-          update_in_insert = false,
-          virtual_text = true,
-        })
       end,
     },
   },
-
-  -- lspconfig
-  --{
-  --  "VonHeikemen/lsp-zero.nvim",
-  --  branch = "v2.x",
-  --  lazy = true,
-  --  dependencies = {
-  --    -- LSP Support
-  --    { "neovim/nvim-lspconfig" },
-  --    {
-  --      -- Optional
-  --      "williamboman/mason.nvim",
-  --      build = function()
-  --        pcall(vim.cmd, "MasonUpdate")
-  --      end,
-  --    },
-  --    -- optional
-  --    { "williamboman/mason-lspconfig.nvim" },
-
-  --    -- Autocompletion
-  --    { "hrsh7th/nvim-cmp" },
-  --    { "hrsh7th/cmp-nvim-lsp" },
-  --    { "L3MON4D3/LuaSnip" },
-
-  --    -- LSP Support
-  --    { "neovim/nvim-lspconfig" },
-  --    { "williamboman/mason.nvim" },
-  --    { "williamboman/mason-lspconfig.nvim" },
-
-  --    -- null-ls
-  --    { "jose-elias-alvarez/null-ls.nvim" },
-
-  --    -- ltex_extra
-  --    {
-  --      "barreiroleo/ltex_extra.nvim",
-  --      dependencies = { "neovim/nvim-lspconfig" },
-  --    },
-  --  },
-  --  config = function()
-  --    local lsp = require("lsp-zero")
-  --    lsp.preset("recommended")
-  --    lsp.ensure_installed({
-  --      "intelephense",
-  --    })
-  --    lsp.nvim_workspace()
-
-  --    local cmp = require("cmp")
-  --    lsp.defaults.cmp_mappings({
-  --      ["<C-p>"] = cmp.mapping.select_prev_item({
-  --        behavior = cmp.SelectBehavior.Select,
-  --      }),
-  --      ["<C-n>"] = cmp.mapping.select_next_item({
-  --        behavior = cmp.SelectBehavior.Select,
-  --      }),
-  --      ["<C-y>"] = cmp.mapping.confirm({
-  --        select = true,
-  --      }),
-  --      ["<C-Space>"] = cmp.mapping.complete(),
-  --      ["<tab>"] = vim.NIL,
-  --      ["<S-tab>"] = vim.NIL,
-  --    })
-
-  --    lsp.set_preferences({
-  --      suggest_lsp_servers = false,
-  --      sign_icons = {
-  --        error = "E",
-  --        warn = "W",
-  --        hint = "H",
-  --        info = "I",
-  --      },
-  --    })
-
-  --    lsp.on_attach(function(_, bufnr)
-  --      local opts = { buffer = bufnr, remap = false }
-
-  --      vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-  --      vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-  --      vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
-  --      vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
-  --      vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
-  --      vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
-  --      vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
-  --      vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
-  --      vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
-  --      vim.keymap.set("n", "<leader>vh", vim.lsp.buf.signature_help, opts)
-  --    end)
-
-  --    lsp.setup()
-
-  --    local nls = require("null-ls")
-  --    nls.setup({
-  --      save_after_format = false,
-  --      sources = {
-  --        nls.builtins.formatting.stylua,
-  --        nls.builtins.formatting.prettier.with({
-  --          only_local = ".prettierrc.json",
-  --        }),
-  --        nls.builtins.formatting.phpcsfixer.with({
-  --          only_local = "vendor/bin",
-  --        }),
-  --        nls.builtins.diagnostics.ansiblelint.with({
-  --          only_local = ".ansible-lint",
-  --        }),
-  --        nls.builtins.diagnostics.phpstan.with({
-  --          only_local = "vendor/bin",
-  --        }),
-  --      },
-  --    })
-
-  --    vim.diagnostic.config({
-  --      update_in_insert = false,
-  --      virtual_text = true,
-  --    })
-  --  end,
-  --},
+  --  Formatting
+  {
+    "stevearc/conform.nvim",
+    event = "InsertEnter",
+    cmd = { "ConformInfo" },
+    keys = {
+      {
+        "<leader>f",
+        function()
+          require("conform").format({ async = true, lsp_fallback = true })
+        end,
+        desc = "Format buffer",
+      },
+    },
+    opts = {
+      formatters = {
+        bibtex = {
+          command = "bibtex-tidy",
+          args = {
+            "--curly",
+            "--numeric",
+            "--sort=year",
+            "--duplicates=key,doi",
+            "--strip-enclosing-braces",
+            "--sort-fields",
+            "--encode-urls",
+          },
+        },
+      },
+      formatters_by_ft = {
+        bib = { "bibtex" },
+        go = { "gofmt" },
+        lua = { "stylua" },
+        php = { "php_cs_fixer" },
+        python = { "black" },
+        rust = { "rustfmt" },
+        tex = { "latexindent" },
+        --["*"] = { "codespell" },
+        ["_"] = { "trim_whitespace" },
+      },
+    },
+  },
+  -- Linter
+  {
+    "mfussenegger/nvim-lint",
+    event = "InsertEnter",
+    config = function()
+      local lint = require("lint")
+      lint.linters_by_ft = {
+        php = { "phpstan" },
+      }
+      vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
+        callback = function()
+          lint.try_lint()
+        end,
+      })
+    end,
+  },
 }

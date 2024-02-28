@@ -16,9 +16,4 @@ vim.keymap.set("n", "<leader>Y", [["+Y]])
 
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
-
---testing some out
-vim.keymap.set("n", "[q", "<cmd>cnext<CR>zz")
-vim.keymap.set("n", "]q", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww /home/daneel/personal/sessionizer/target/release/sessionizer<CR>")

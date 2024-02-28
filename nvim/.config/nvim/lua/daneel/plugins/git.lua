@@ -6,7 +6,6 @@ return {
       { "<leader>gs", vim.cmd.Git },
     },
   },
-  -- better diffing (of just learn fugitive diff maybe? git gud scrub
   {
     "sindrets/diffview.nvim",
     cmd = {
