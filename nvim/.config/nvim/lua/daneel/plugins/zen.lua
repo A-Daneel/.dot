@@ -1,15 +1,17 @@
+---@module "lazy"
+---@type LazySpec[]
 return {
   "folke/zen-mode.nvim",
-  cmd = "ZenMode",
+  ---@module "zen-mode"
   ---@type ZenOptions
-    ---@diagnostic disable-next-line: missing-fields
+  ---@diagnostic disable-next-line: missing-fields
   opts = {
     window = {
-      width = 90,
       options = {
         number = true,
         relativenumber = true,
       },
+      width = 90,
     },
   },
   keys = {

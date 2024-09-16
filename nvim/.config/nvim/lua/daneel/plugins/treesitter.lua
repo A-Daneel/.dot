@@ -1,3 +1,5 @@
+---@module "lazy"
+---@type LazySpec[]
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -6,8 +8,13 @@ return {
     ---@type TSConfig
     ---@diagnostic disable-next-line: missing-fields
     opts = {
-      highlight = { enable = true },
-      indent = { enable = false },
+      highlight = {
+        enable = true,
+        disable = { "latex" },
+      },
+      indent = {
+        enable = true,
+      },
       ensure_installed = {
         "lua",
         "php",

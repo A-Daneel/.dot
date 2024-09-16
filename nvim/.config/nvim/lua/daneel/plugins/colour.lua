@@ -1,3 +1,5 @@
+---@module "lazy"
+---@type LazySpec[]
 return {
   {
     "folke/tokyonight.nvim",
@@ -5,14 +7,16 @@ return {
     priority = 1000,
     config = function()
       local tokyonight = require("tokyonight")
-      tokyonight.setup({
+      ---@type tokyonight.Config
+      local tokyoConfig = {
         style = "night",
-        transparent = true,
         styles = {
           sidebars = "transparent",
           floats = "dark",
         },
-      })
+        transparent = true,
+      }
+      tokyonight.setup(tokyoConfig)
       tokyonight.load()
     end,
   },

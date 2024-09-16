@@ -9,14 +9,14 @@ if not vim.uv.fs_stat(lazypath) then
     lazypath,
   })
 end
-vim.opt.runtimepath:prepend(lazypath)
+vim.opt.rtp:prepend(lazypath)
 
 ---@type LazyConfig
 local lazyOpts = {
   defaults = { lazy = true },
   install = {
-    missing = true,
     colorscheme = { "tokyonight" },
+    missing = true,
   },
   spec = "daneel.plugins",
 }

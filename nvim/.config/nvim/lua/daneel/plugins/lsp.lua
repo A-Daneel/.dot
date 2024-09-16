@@ -1,8 +1,7 @@
+---@module "lazy"
+---@type LazySpec[]
 return {
   {
-    -- special ltex shizzle
-    { "barreiroleo/ltex_extra.nvim", ft = "tex" }, -- why does this not work?
-    -- LSP
     {
       "neovim/nvim-lspconfig",
       cmd = "LspInfo",
@@ -11,8 +10,10 @@ return {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
         "hrsh7th/cmp-nvim-lsp",
-        -- special nvim lsp from folke
-        { "folke/neodev.nvim", opts = {} },
+        -- special ltex shizzle
+        { "barreiroleo/ltex_extra.nvim", ft = "tex" },
+        -- fancy updates, might be nice?
+        { "j-hui/fidget.nvim", opts = {} },
       },
       config = function()
         -- This is where all the LSP shenanigans will live
@@ -53,7 +54,7 @@ return {
 
         vim.diagnostic.config({
           float = {
-            source = "always",
+            source = true,
           },
         })
         vim.api.nvim_create_autocmd("LspAttach", {
@@ -73,8 +74,6 @@ return {
         })
       end,
     },
-
-    -- Autocompletion
     {
       "hrsh7th/nvim-cmp",
       event = "InsertEnter",
@@ -83,34 +82,80 @@ return {
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
         "micangl/cmp-vimtex",
-        "L3MON4D3/LuaSnip",
+        { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
+        "saadparwaiz1/cmp_luasnip",
       },
-      opts = function()
+      config = function()
         local cmp = require("cmp")
-        local cmp_select = { behavior = cmp.SelectBehavior.Select }
-        return {
+
+        cmp.setup({
+          mapping = {
+            ["<C-n>"] = cmp.mapping.select_next_item({
+              behavior = cmp.SelectBehavior.Select,
+            }),
+            ["<C-p>"] = cmp.mapping.select_prev_item({
+              behavior = cmp.SelectBehavior.Select,
+            }),
+            ["<C-y>"] = cmp.mapping.confirm({
+              behavior = cmp.SelectBehavior.Select,
+              select = true,
+            }),
+            ["<C-Space>"] = cmp.mapping.complete(),
+          },
+
+          sources = cmp.config.sources({
+            { name = "luasnip" },
+            { name = "nvim_lsp" },
+            { name = "buffer" },
+            { name = "path" },
+          }),
+
           snippet = {
             expand = function(args)
               require("luasnip").lsp_expand(args.body)
             end,
           },
-          mapping = {
-            ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-            ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-            ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-            ["<C-Space>"] = cmp.mapping.complete(),
-            ["<tab>"] = nil,
-            ["<S-tab>"] = nil,
-          },
-          sources = cmp.config.sources({
-            { name = "vim-dadbod-completion" },
+        })
+        cmp.setup.filetype({ "tex" }, {
+          sources = {
+            { name = "luasnip" },
             { name = "nvim_lsp" },
             { name = "vimtex" },
-            { name = "luasnip" },
             { name = "buffer" },
             { name = "path" },
-          }),
-        }
+          },
+        })
+        cmp.setup.filetype({ "sql" }, {
+          sources = {
+            { name = "vim-dadbod-completion" },
+            { name = "buffer" },
+          },
+        })
+        local ls = require("luasnip")
+        ls.config.set_config({
+          history = false,
+          updateevents = "TextChanged,TextChangedI",
+        })
+
+        for _, ft_path in
+          ipairs(
+            vim.api.nvim_get_runtime_file("lua/daneel/snippets/*.lua", true)
+          )
+        do
+          loadfile(ft_path)()
+        end
+
+        vim.keymap.set({ "i", "s" }, "<c-k>", function()
+          if ls.expand_or_jumpable() then
+            ls.expand_or_jump()
+          end
+        end, { silent = true })
+
+        vim.keymap.set({ "i", "s" }, "<c-j>", function()
+          if ls.jumpable(-1) then
+            ls.jump(-1)
+          end
+        end, { silent = true })
       end,
     },
   },
@@ -119,27 +164,24 @@ return {
     "stevearc/conform.nvim",
     event = "InsertEnter",
     cmd = { "ConformInfo" },
-    keys = {
-      {
-        "<leader>f",
-        function()
-          require("conform").format({ async = true, lsp_fallback = true })
-        end,
-        desc = "Format buffer",
-      },
-    },
+    ---@module "conform"
+    ---@type conform.setupOpts
     opts = {
+      ---@type conform.FormatterConfigOverride
       formatters = {
         bibtex = {
           command = "bibtex-tidy",
           args = {
             "--curly",
             "--numeric",
-            "--sort=year",
+            "--months",
+            "--sort=key",
             "--duplicates=key,doi",
-            "--strip-enclosing-braces",
+            "--no-escape",
+            -- "--strip-enclosing-braces",
             "--sort-fields",
-            "--encode-urls",
+            "--trailing-commas",
+            "--remove-empty-fields",
           },
         },
       },
@@ -151,25 +193,41 @@ return {
         python = { "black" },
         rust = { "rustfmt" },
         tex = { "latexindent" },
-        --["*"] = { "codespell" },
         ["_"] = { "trim_whitespace" },
+      },
+    },
+    keys = {
+      {
+        "<leader>f",
+        function()
+          require("conform").format({
+            async = true,
+            lsp_format = "fallback",
+          })
+        end,
+        desc = "Format buffer",
       },
     },
   },
   -- Linter
   {
     "mfussenegger/nvim-lint",
-    event = "InsertEnter",
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       local lint = require("lint")
       lint.linters_by_ft = {
         php = { "phpstan" },
       }
-      vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
-        callback = function()
-          lint.try_lint()
-        end,
-      })
+      local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+      vim.api.nvim_create_autocmd(
+        { "BufEnter", "BufWritePost", "InsertLeave" },
+        {
+          group = lint_augroup,
+          callback = function()
+            require("lint").try_lint()
+          end,
+        }
+      )
     end,
   },
 }

@@ -1,27 +1,17 @@
+---@module "lazy"
+---@type LazySpec[]
 return {
   {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
     dependencies = {
       "nvim-telescope/telescope-fzf-native.nvim",
-      "nvim-telescope/telescope-bibtex.nvim",
     },
-    opts = function()
-      local home = vim.fn.expand("~")
-      return {
-        extensions = {
-          bibtex = {
-            format = "plain",
-            global_files = { home .. "/biblio.bib" },
-          },
-        },
-      }
-    end,
     config = function(_, opts)
       local telescope = require("telescope")
       telescope.setup(opts)
 
-      local extensions = { "fzf", "bibtex" }
+      local extensions = { "fzf" }
       for _, extension in ipairs(extensions) do
         telescope.load_extension(extension)
       end
@@ -31,21 +21,19 @@ return {
       return {
         {
           "<leader>pf",
-          function()
-            builtin.find_files()
-          end,
+          builtin.find_files,
         },
         {
           "<C-p>",
-          function()
-            builtin.git_files()
-          end,
+          builtin.git_files,
         },
         {
           "<leader>ps",
-          function()
-            builtin.live_grep()
-          end,
+          builtin.live_grep,
+        },
+        {
+          "<leader>vh",
+          builtin.help_tags,
         },
       }
     end,

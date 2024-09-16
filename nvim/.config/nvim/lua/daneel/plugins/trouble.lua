@@ -1,55 +1,49 @@
+---@module "lazy"
+---@type LazySpec[]
 return {
   "folke/trouble.nvim",
-  cmd = { "TroubleToggle", "Trouble" },
-  ---@type TroubleOptions opts
+  event = "LspAttach",
+  ---@module "trouble"
+  ---@type trouble.Config
   opts = {
-    icons = false,
-    use_diagnostic_signs = true,
+    ---@type table <string, trouble.Mode>
+    modes = {
+      diagnostics = {
+        focus = false,
+        win = {
+          position = "bottom",
+          size = { height = 0.25 },
+        },
+      },
+      symbols = {
+        focus = false,
+        win = {
+          position = "right",
+          size = { width = 0.35 },
+        },
+      },
+    },
   },
   keys = {
     {
       "<leader>xx",
-      "<cmd>TroubleToggle document_diagnostics<cr>",
-      desc = "Document Diagnostics (Trouble)",
+      "<cmd>Trouble diagnostics toggle<cr>",
+      desc = "Diagnostics (Trouble)",
     },
     {
       "<leader>xX",
-      "<cmd>TroubleToggle workspace_diagnostics<cr>",
-      desc = "Workspace Diagnostics (Trouble)",
+      "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+      desc = "Buffer Diagnostics (Trouble)",
     },
     {
-      "<leader>xL",
-      "<cmd>TroubleToggle loclist<cr>",
-      desc = "Location List (Trouble)",
+      "<leader>cs",
+      "<cmd>Trouble symbols toggle focus=false<cr>",
+      desc = "Symbols (Trouble)",
     },
     {
-      "<leader>xQ",
-      "<cmd>TroubleToggle quickfix<cr>",
-      desc = "Quickfix List (Trouble)",
-    },
-    {
-      "[q",
-      function()
-        if require("trouble").is_open() then
-          require("trouble").previous({ skip_groups = true, jump = true })
-        else
-          vim.cmd.cprev()
-          vim.cmd("normal! zz")
-        end
-      end,
-      desc = "Previous trouble/quickfix item",
-    },
-    {
-      "]q",
-      function()
-        if require("trouble").is_open() then
-          require("trouble").next({ skip_groups = true, jump = true })
-        else
-          vim.cmd.cnext()
-          vim.cmd("normal! zz")
-        end
-      end,
-      desc = "Next trouble/quickfix item",
+      "<leader>cl",
+      "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+      desc = "LSP Definitions / references / ... (Trouble)",
     },
   },
 }

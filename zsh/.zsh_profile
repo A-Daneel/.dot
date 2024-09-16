@@ -1,5 +1,5 @@
 VIM="nvim"
-alias idea="$HOME/Downloads/idea-IC-222.3739.54/bin/idea.sh &; disown"
+alias sesh="$HOME/personal/sessionizer/target/release/sessionizer"
 
 source /usr/share/doc/fzf/examples/key-bindings.zsh
 source /usr/share/doc/fzf/examples/completion.zsh

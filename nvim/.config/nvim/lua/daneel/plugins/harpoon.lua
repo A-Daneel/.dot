@@ -1,3 +1,5 @@
+---@module "lazy"
+---@type LazySpec[]
 return {
   {
     "theprimeagen/harpoon",
@@ -5,8 +7,9 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+    ---@module "harpoon"
     ---@type HarpoonConfig
-      ---@diagnostic disable-next-line: missing-fields
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       ---@diagnostic disable-next-line: missing-fields
       settings = {
@@ -20,7 +23,7 @@ return {
         {
           "<leader>a",
           function()
-            harpoon:list():append()
+            harpoon:list():add()
           end,
           desc = "Poon a file",
         },

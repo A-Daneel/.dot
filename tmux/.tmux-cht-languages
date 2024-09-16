@@ -1,4 +1,5 @@
 golang
+rust
 nodejs
 javascript
 tmux
@@ -10,3 +11,4 @@ bash
 php
 css
 html
+latex
